@@ -526,7 +526,7 @@ namespace Bachelin_Merchant
             string Ceo_Nm = shop_info["Ceo_Nm"] == null ? "" : shop_info["Ceo_Nm"].ToString();    //대표자명
             string Tel_No = shop_info["Tel_No"] == null ? "" : shop_info["Tel_No"].ToString();    //전화번호
             string Close_Day = shop_info["Close_Day"] == null ? "" : shop_info["Close_Day"].ToString();    //휴일(매주 일요일, 연중무휴)
-            string Ct_Cd = shop_info["Ct_Cd"] == null ? "" : shop_info["Ct_Cd"].ToString();    //카테고리코드
+            string Ct_Cd = shop_info["Ct_Ty_Cd"] == null ? "" : shop_info["Ct_Ty_Cd"].ToString();    //카테고리코드
             string Ct_Cd_Nm = shop_info["Ct_Cd_Nm"] == null ? "" : shop_info["Ct_Cd_Nm"].ToString();    //카테고리명
             string Dlvry_Tm = shop_info["Dlvry_Tm"] == null ? "" : shop_info["Dlvry_Tm"].ToString();    //배달시간(Dlvry_Tm=평일, 토요일 - 오전 11:00 ~ 오후 8:00)
             string Loc_Pnt_Lng = shop_info["Loc_Pnt_Lng"] == null ? "" : shop_info["Loc_Pnt_Lng"].ToString();    //위도(127.28949163)
@@ -579,7 +579,7 @@ namespace Bachelin_Merchant
 
                 //매장상세정보
                 string baeminShopcd = baeminshop_cd;
-                string strUrl = "https://shopdp-api.baemin.com/v8/shop/" + baeminShopcd + "/detail?lat=" + lat + "&lng=" + lng + "&limit=25&mem=&memid=&defaultreview=N&campaignId=9711657&displayGroup=BAEMIN_DELIVERY_HOME&lat4Distance=" + lat + "&lng4Distance=" + lng + "&filter=&appver=12.23.0&carrier=302780&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUD3ae65d495619f1bc&adid=NONE&sessionId=&osver=32&oscd=2&ActionTrackingKey=Organic";
+                string strUrl = "https://shopdp-api.baemin.com/v8/shop/" + baeminShopcd + "/detail?lat=" + lat + "&lng=" + lng + "&limit=25&mem=&memid=&defaultreview=N&campaignId=9711657&displayGroup=BAEMIN_DELIVERY_HOME&lat4Distance=" + lat + "&lng4Distance=" + lng + "&filter=&appver=12.23.0&carrier=302780&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUDf48850e556873dfc&adid=NONE&sessionId=&osver=32&oscd=2&ActionTrackingKey=Organic";
                 //string strReturn = _sc.GetHtmlSource(finalUrl, "", "", "", ref cookieCollection, ref cookieContainer);
                 string strToken = _sc.GetHtmlSource("https://baeminsolver.onrender.com/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
 
@@ -613,7 +613,7 @@ namespace Bachelin_Merchant
                 string Tel_No = shop_info["Tel_No"] == null ? "" : shop_info["Tel_No"].ToString();    //전화번호
                 string Close_Day = shop_info["Close_Day"] == null ? "" : shop_info["Close_Day"].ToString();    //휴일(매주 일요일, 연중무휴)
                 string alwayhol = Close_Day == "연중무휴" ? "1" : "0";
-                string Ct_Cd = shop_info["Ct_Cd"] == null ? "" : shop_info["Ct_Cd"].ToString();    //카테고리코드
+                string Ct_Cd = shop_info["Ct_Ty_Cd"] == null ? "" : shop_info["Ct_Ty_Cd"].ToString();    //카테고리코드
                 string Ct_Cd_Nm = shop_info["Ct_Cd_Nm"] == null ? "" : shop_info["Ct_Cd_Nm"].ToString().Replace("'", "`");    //카테고리명
                 //카페·디저트
                 //카페/디저트
