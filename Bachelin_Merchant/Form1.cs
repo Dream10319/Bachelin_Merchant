@@ -581,6 +581,7 @@ namespace Bachelin_Merchant
                 string baeminShopcd = baeminshop_cd;
                 string strUrl = "https://shopdp-api.baemin.com/v8/shop/" + baeminShopcd + "/detail?lat=" + lat + "&lng=" + lng + "&limit=25&mem=&memid=&defaultreview=N&campaignId=9711657&displayGroup=BAEMIN_DELIVERY_HOME&lat4Distance=" + lat + "&lng4Distance=" + lng + "&filter=&appver=12.23.0&carrier=302780&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUD3ae65d495619f1bc&adid=NONE&sessionId=&osver=32&oscd=2&ActionTrackingKey=Organic";
                 //string strReturn = _sc.GetHtmlSource(finalUrl, "", "", "", ref cookieCollection, ref cookieContainer);
+                string strToken = _sc.GetHtmlSource("https://baeminsolver.onrender.com/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
 
                 var client = new RestClient(strUrl);
                 var request = new RestRequest();
@@ -589,7 +590,7 @@ namespace Bachelin_Merchant
                 request.AddHeader("Connection", "Keep-Alive");
                 request.AddHeader("Host", "shopdp-api.baemin.com");
                 request.AddHeader("User-Agent", "and1_12.23.0");
-                request.AddHeader("USER-BAEDAL", "W/OnG34HSvOVmxn4McyeRzEK3Ldc9+ruPokFIKgQcm2WNLVj7olTxJ0p1zFrDCSZNSn3awPLFRB7F7SLiZOBxY5dp1ciNVpOX4dPZMCvouEui+ogBfrZb1Pjq9MjIKgPTZ0PsoEXEDVbIayRYi3FqT19ktIosfMynUFcdCj6Qdpz/m8+MSoP9SsUAtxB8t2W+KD/mAlr8ojTCP1x0n5tWG31re4ZOComuGzviiuX7wpkfSLsshuaV9mNVXcByHNw");
+                request.AddHeader("USER-BAEDAL", strToken);
                 string strReturn = client.ExecuteGet(request).Content;
 
                 JavaScriptSerializer jss2 = new JavaScriptSerializer();
