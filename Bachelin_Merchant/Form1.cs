@@ -438,15 +438,16 @@ namespace Bachelin_Merchant
             {
                 //매장명으로 좌표조회
                 //string strUrl = "https://shopdp-api.baemin.com/v2/SEARCH/shops?keyword=" + keyword + "&filter=&sort=SORT__DEFAULT&referral=&popularKeywordRank=&kind=&offset=" + (npage * nlimit).ToString() + "&limit=" + nlimit.ToString() + "&latitude=" + lat + "&longitude=" + lng + "&extension=&appver=11.8.2&carrier=&site=7jWXRELC2e&deviceModel=SM-G973N&dvcid=OPUD4bf43dcba41eff4a&adid=NONE&sessionId=&osver=22&oscd=2";
-                string strUrl = "https://search-gateway.baemin.com/v1/search?keyword=" + keyword + "&currentTab=BAEMIN_DELIVERY&referral=&entryPoint=&kind=DEFAULT&offset=" + (npage * nlimit).ToString() + "&limit=" + nlimit.ToString() + "&latitude=" + lat + "&longitude=" + lng + "&isFirstRequest=false&extension=&baeminDeliverySort=&baeminTakeoutFilter=&baeminTakeoutSort=&isBmartRegion=true&isBaeminStoreRegion=true&commerceSort=&commerceCursor=&commerceFilters=&commerceSelectedSellerId=&commerceSelectedShopId=&commerceSearchType=DEFAULT&hyperMarketSort=&hyperMarketSearchType=DEFAULT&perseusSessionId=&memberNumber=000000000000&sessionId=&carrier=&appver=12.23.0&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUD3ae65d495619f1bc&adid=NONE&sessionId=&osver=32&oscd=2";
+
+                string strUrl = "https://search-gateway.baemin.com/v1/search?keyword=" + keyword + "&currentTab=BAEMIN_DELIVERY&referral=Search&entryPoint=&kind=DEFAULT&offset=" + (npage * nlimit).ToString() + "&limit=" + nlimit.ToString() + "&latitude=" + lat + "&longitude=" + lng + "&isFirstRequest=true&extension=&baeminDeliverySort=&baeminTakeoutFilter=&baeminTakeoutSort=&isBmartRegion=true&isBaeminStoreRegion=true&commerceSort=&commerceCursor=&commerceFilters=&commerceSelectedSellerId=&commerceSelectedShopId=&commerceSearchType=DEFAULT&hyperMarketSort=&hyperMarketSearchType=DEFAULT&perseusSessionId=&memberNumber=000000000000&sessionId=&carrier=&appver=15.12.2&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUD3ae65d495619f1bc&adid=NONE&sessionId=&osver=32&oscd=2";
                 //string strReturn = _sc.GetHtmlSource(strUrl, "utf-8", "", "", ref cookieCollection, ref cookieContainer);
-                string strToken = _sc.GetHtmlSource("https://baeminsolver.onrender.com/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
+                string strToken = _sc.GetHtmlSource("https://api.aicomment.info/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
                 var client = new RestClient(strUrl);
                 var request = new RestRequest();
                 request.AddHeader("Accept-Encoding", "gzip, deflate");
                 request.AddHeader("Connection", "Keep-Alive");
                 request.AddHeader("Host", "search-gateway.baemin.com");
-                request.AddHeader("User-Agent", "and1_12.23.0");
+                request.AddHeader("User-Agent", "and1_15.12.2");
                 request.AddHeader("USER-BAEDAL", strToken);
                 string strReturn = client.ExecuteGet(request).Content;
                 JavaScriptSerializer jss2 = new JavaScriptSerializer();
@@ -470,6 +471,20 @@ namespace Bachelin_Merchant
                     string categoryNameKor = shop_info["shopInfo"]["representationMenu"] == null ? "" : shop_info["shopInfo"]["representationMenu"].ToString();    //카테고리
                     string address = shop_info["shopInfo"]["address"] == null ? "" : shop_info["shopInfo"]["address"].ToString();    //주소
                     string logoUrl = shop_info["shopInfo"]["logoUrl"] == null ? "" : shop_info["shopInfo"]["logoUrl"].ToString();    //매장이미지
+
+
+                    var dir = $"ShopData\\{shopNumber}";
+                    
+
+                    string shopdetailUrl = string.Format($@"https://shopdp-api.baemin.com/shop/{shopNumber}/info-detail?memberNumber=&lat={lat}&lng={lng}&sessionId=17b5632f7742526e26a535687&carrier=302780&site=7jWXRELC2e&dvcid=OPUDf48850e556873dfc&adid=4bd027e0-d307-4740-8866-a9e00e4861f1&deviceModel=SM-G9500&appver=12.23.0&oscd=2&osver=32&dongCode=&zipCode=&ActionTrackingKey=Organic");
+                    RestClient detailclient = new RestClient(shopdetailUrl);
+                    string shopdetail = detailclient.ExecuteGet(request).Content;
+
+                    if (shopdetail.ToLower().Contains("success"))
+                    {
+                        Directory.CreateDirectory(dir);
+                        File.WriteAllText(string.Format(@"{1}-detail.json", dir, shopNumber), shopdetail);
+                    } 
 
                     if (logoUrl.IndexOf(".jpg") < 0)
                     {
@@ -581,7 +596,7 @@ namespace Bachelin_Merchant
                 string baeminShopcd = baeminshop_cd;
                 string strUrl = "https://shopdp-api.baemin.com/v8/shop/" + baeminShopcd + "/detail?lat=" + lat + "&lng=" + lng + "&limit=25&mem=&memid=&defaultreview=N&campaignId=9711657&displayGroup=BAEMIN_DELIVERY_HOME&lat4Distance=" + lat + "&lng4Distance=" + lng + "&filter=&appver=12.23.0&carrier=302780&site=7jWXRELC2e&deviceModel=CPH1823&dvcid=OPUDf48850e556873dfc&adid=NONE&sessionId=&osver=32&oscd=2&ActionTrackingKey=Organic";
                 //string strReturn = _sc.GetHtmlSource(finalUrl, "", "", "", ref cookieCollection, ref cookieContainer);
-                string strToken = _sc.GetHtmlSource("https://baeminsolver.onrender.com/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
+                string strToken = _sc.GetHtmlSource("https://api.aicomment.info/v1/baemin/solver", "utf-8", "", "", ref cookieCollection, ref cookieContainer);
 
                 var client = new RestClient(strUrl);
                 var request = new RestRequest();
@@ -602,8 +617,8 @@ namespace Bachelin_Merchant
                     MessageBox.Show("매장을 조회하지 못했습니다.");
                     return;
                 }
-                dynamic shop_info = data2["data"]["shop_info"];
-                dynamic shop_menu = data2["data"]["shop_menu"];
+                dynamic shop_info = data2["data"]["shopInfo"];
+                dynamic shop_menu = data2["data"]["shopMenu"];
 
                 //매장기본정보 조회
                 //string Addr = shop_info["Addr"] == null ? "" : shop_info["Addr"].ToString().Replace("'", "`");    //주소
